@@ -1,0 +1,26 @@
+#!/bin/bash
+
+PYTHON_SCRIPT="$HOME/dev/sh-ai/script.py"
+
+show_help() {
+  echo "Usage: /ai <description of command>"
+  echo "Example: /ai list all files in current directory"
+  echo "Example: /ai find all pdf files modified in the last 7 days"
+  exit 0
+}
+
+if [[ "$1" == "-h" || "$1" == "--help" || $# -eq 0 ]]; then
+  show_help
+fi
+
+question="$*"
+
+command_to_run=$(python3 "$PYTHON_SCRIPT" "$question")
+
+if [ $? -ne 0 ]; then
+  echo "Error: Failed to generate command. Check your python script"
+  exit 1
+fi
+
+echo -e "\033[1;32m# Generated command:\033[0m"
+echo -e "\033[1;36m$command_to_run\033[0m"
